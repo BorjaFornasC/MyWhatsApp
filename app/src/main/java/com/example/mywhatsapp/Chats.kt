@@ -2,120 +2,174 @@ package com.example.mywhatsapp
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 
 @Composable
 fun chats() {
-    Text(text = "Chats")
+    ContactoView()
 }
 
-data class Coffee(
-    var nombreCafeteria: String,
-    var direccion : String,
+data class Contacto(
+    var grupo: String,
+    var nombre : String,
     @DrawableRes var photo: Int
 )
 
-fun getCoffee(): List<Coffee> {
+fun getContacto(): List<Contacto> {
     return listOf(
-        Coffee(
-            "Antico Caffè Greco",
-            "St. Italy, Rome",
-            R.drawable.image1
+        Contacto(
+            "Departamento Informática",
+            "Jefe de Departamento",
+            R.drawable.photo
         ),
-        Coffee(
-            "Coffee Room",
-            "St. Germany, Berlin",
-            R.drawable.image2
+        Contacto(
+            "Departamento Informática",
+            "Tutora DAM",
+            R.drawable.photo1
         ),
-        Coffee(
-            "Coffee Ibiza",
-            "St. Colon, Madrid",
-            R.drawable.image3
+        Contacto(
+            "Departamento Informática",
+            "Tutor DAW",
+            R.drawable.photo2
         ),
-        Coffee(
-            "Pudding Coffee Shop",
-            "St. Diagonal, Barcelona",
-            R.drawable.image4
+        Contacto(
+            "Departamento Informática",
+            "Tutora ASIX",
+            R.drawable.photo3
         ),
-        Coffee(
-            "L'Express",
-            "St. Piccadilly Circus, London",
-            R.drawable.image5
+        Contacto(
+            "Comunidad Propietarios",
+            "Presidenta",
+            R.drawable.photo4
         ),
-        Coffee(
-            " Coffee Corner",
-            "St. Àngel Guimerà, Valencia",
-            R.drawable.image6
+        Contacto(
+            "Comunidad Propietarios",
+            "Secretaria",
+            R.drawable.photo5
         ),
-        Coffee(
-            "Sweet Cup",
-            "St. Kinkerstraat, Amsterdam",
-            R.drawable.image7 
+        Contacto(
+            "Comunidad Propietarios",
+            "Administrador",
+            R.drawable.photo6
+        ),
+        Contacto(
+            "Gimnasio",
+            "Entrenadora",
+            R.drawable.photo7
+        ),
+        Contacto(
+            "Gimnasio",
+            "Nutricionista",
+            R.drawable.photo8
+        ),
+        Contacto(
+            "Gimnasio",
+            "Fisioterapeuta",
+            R.drawable.photo9
         )
     )
 }
 
 @Composable
-fun ItemCoffee(coffee: Coffee) {
-    Card(modifier =
-    Modifier
-        .clickable {  }
-        .padding(10.dp)
-        .fillMaxWidth(), elevation = CardDefaults.cardElevation(10.dp)) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(id = coffee.photo),
-                contentDescription = "Avatar",
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Crop
-            )
-            Text(text = coffee.nombreCafeteria, fontSize = 50.sp,
-                textAlign = TextAlign.Center, color = Color.Black)
-
-            Spacer(modifier = Modifier.size(10.dp))
-
-
-            Spacer(modifier = Modifier.size(30.dp))
-
-            Text(text = coffee.direccion, modifier = Modifier.padding(start = 10.dp, bottom = 10.dp))
-
-            Divider()
-
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "RESERVE")
+fun ItemContacto(contacto: Contacto) {
+    val scope = rememberCoroutineScope()
+    var showMenu by remember { mutableStateOf(false) }
+    Row(modifier = Modifier.pointerInput(true) {
+        detectTapGestures(onLongPress = {
+            scope.launch {
+                showMenu = !showMenu
             }
+        })
+    }) {
+        DropdownMenu(
+            expanded = showMenu,
+            onDismissRequest = { showMenu = false },
+            Modifier.width(150.dp)
+        ) {
+            DropdownMenuItem(
+                text = { Text(text = "Salir del grupo", color = Color.Black) },
+                onClick = { /*TODO*/ })
+            DropdownMenuItem(
+                text = { Text(text = "Info. del grupo", color = Color.Black) },
+                onClick = { /*TODO*/ })
+            DropdownMenuItem(
+                text = { Text(text = "Crear acceso directo", color = Color.Black) },
+                onClick = { /*TODO*/ })
         }
+        Image(
+            painter = painterResource(id = contacto.photo),
+            contentDescription = "Avatar",
+            modifier = Modifier
+                .padding(start = 10.dp, top = 5.dp, bottom = 5.dp)
+                .size(75.dp)
+                .clip(shape = RoundedCornerShape(50.dp)),
+            contentScale = ContentScale.Crop,
+        )
+        Text(text = contacto.nombre, fontSize = 17.sp,
+            textAlign = TextAlign.Center, color = Color.Black, modifier = Modifier.padding(top = 30.dp, start = 10.dp))
     }
+
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("ResourceType")
 @Composable
-fun CoffeeView() {
-    LazyColumn {
-        items(getCoffee()) { coffee ->
-            ItemCoffee(coffee = coffee)
+fun ContactoView() {
+    val contactos : Map<String, List<Contacto>> = getContacto().groupBy { it.grupo }
+
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        contactos.forEach { (grupo, myContacto) ->
+            stickyHeader {
+                Text(
+                    text = grupo,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.LightGray),
+                    fontSize = 16.sp
+                )
+            }
+            items(myContacto) { contacto ->
+                ItemContacto(contacto = contacto)
+            }
         }
     }
 }
