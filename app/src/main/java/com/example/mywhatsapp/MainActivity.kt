@@ -4,13 +4,21 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -44,6 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.mywhatsapp.ui.theme.MyWhatsAppTheme
@@ -64,10 +73,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    floatingActionButton = {FloatingActionButton(onClick = { /*TODO*/ }, containerColor = WhatsOscuro,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = "Check")
-                    }},
+                    floatingActionButton = { MyFloatingActionButton() },
                     topBar = {MyTopAppBar(scrollBehavior)},
                     containerColor = MaterialTheme.colorScheme.background)
                 {
@@ -112,9 +118,15 @@ fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior){
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyTabs() {
-    val pagerState = rememberPagerState(initialPage = 0)
+
     val scope = rememberCoroutineScope()
     val titles = listOf("Chats", "Novedades", "Llamadas")
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        titles.size
+    }
     Column {
         TabRow(selectedTabIndex = pagerState.currentPage, containerColor = WhatsNormal, contentColor = Color.White) {
             titles.forEachIndexed { index, title ->
@@ -125,12 +137,33 @@ fun MyTabs() {
                 )
             }
         }
-        HorizontalPager(pageCount = 3, state = pagerState) { page ->
-            when(page) {
-                0 -> chats()
-                1 -> novedades()
-                2 -> llamadas()
+        HorizontalPager(state = pagerState){
+                page ->
+                when (page) {
+                    0 -> chats()
+                    1 -> novedades()
+                    2 -> llamadas()
+                }
             }
-        }
+    }
+}
+
+@OptIn(ExperimentalAnimationGraphicsApi::class)
+@Composable
+fun MyFloatingActionButton() {
+    FloatingActionButton(onClick = { /*TODO*/ }, containerColor = WhatsOscuro, modifier = Modifier.size(60.dp),
+        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()) {
+        val image =
+            AnimatedImageVector.animatedVectorResource(R.drawable.icono_animado
+            )
+        var atEnd by remember { mutableStateOf(false) }
+        Image(
+            painter = rememberAnimatedVectorPainter(image, atEnd),
+            contentDescription = "VectorDrawable",
+            modifier = Modifier.clickable {
+                atEnd = !atEnd
+            }.size(32.dp),
+            contentScale = ContentScale.Crop,
+        )
     }
 }

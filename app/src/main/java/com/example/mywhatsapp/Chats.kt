@@ -111,13 +111,10 @@ fun getContacto(): List<Contacto> {
 
 @Composable
 fun ItemContacto(contacto: Contacto) {
-    val scope = rememberCoroutineScope()
     var showMenu by remember { mutableStateOf(false) }
     Row(modifier = Modifier.pointerInput(true) {
         detectTapGestures(onLongPress = {
-            scope.launch {
-                showMenu = !showMenu
-            }
+            showMenu = !showMenu
         })
     }) {
         DropdownMenu(
