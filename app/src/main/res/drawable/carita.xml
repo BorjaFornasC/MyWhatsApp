@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="256dp"
+    android:height="256dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path
+        android:name="fondo"
+        android:fillColor="#fe0"
+        android:strokeWidth="2"
+        android:pathData="M 50,50 m -48,0 a 48,48 0 1,0 96,0 a 48,48 0 1,0 -96,0" />
+    <path
+        android:name="ojo_izquierdo"
+        android:strokeColor="@color/black"
+        android:fillColor="@color/black"
+        android:strokeWidth="2"
+        android:pathData="M 35,40 m -7,0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0" />
+    <path
+        android:name="ojo_derecho"
+        android:strokeColor="@color/black"
+        android:fillColor="@color/black"
+        android:strokeWidth="2"
+        android:pathData="M 65,40 m -7,0 a 7,7 0 1,0 14,0 a 7,7 0 1,0 -14,0" />
+    <path
+        android:name="boca_contenta"
+        android:strokeColor="@color/black"
+        android:strokeWidth="2"
+        android:pathData="M 30,65 Q 50,85 70,65" />
+    <path
+        android:name="ojo_izquierdo_abierto"
+        android:fillColor="#00ff00"
+        android:strokeWidth="2"
+        android:pathData="M 25,30 Q 35,30 45,30" />
+    <path
+        android:name="ojo_derecho_abierto"
+        android:fillColor="#00ff00"
+        android:strokeWidth="2"
+        android:pathData="M 55,30 Q 65,30 75,30" />
+</vector>

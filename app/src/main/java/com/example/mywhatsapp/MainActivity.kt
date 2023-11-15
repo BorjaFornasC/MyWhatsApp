@@ -120,7 +120,7 @@ fun MyTopAppBar(scrollBehavior: TopAppBarScrollBehavior){
 fun MyTabs() {
 
     val scope = rememberCoroutineScope()
-    val titles = listOf("Chats", "Novedades", "Llamadas")
+    val titles = listOf("Chats", "Novedad", "Llamadas", "Estrella")
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f
@@ -128,23 +128,27 @@ fun MyTabs() {
         titles.size
     }
     Column {
-        TabRow(selectedTabIndex = pagerState.currentPage, containerColor = WhatsNormal, contentColor = Color.White) {
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            containerColor = WhatsNormal,
+            contentColor = Color.White
+        ) {
             titles.forEachIndexed { index, title ->
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = { scope.launch { pagerState.animateScrollToPage(page = index) } },
-                    text = { Text(text = title)}
+                    text = { Text(text = title) }
                 )
             }
         }
-        HorizontalPager(state = pagerState){
-                page ->
-                when (page) {
-                    0 -> chats()
-                    1 -> novedades()
-                    2 -> llamadas()
-                }
+        HorizontalPager(state = pagerState) { page ->
+            when (page) {
+                0 -> chats()
+                1 -> novedad()
+                2 -> llamadas()
+                3 -> estrella()
             }
+        }
     }
 }
 
@@ -160,9 +164,11 @@ fun MyFloatingActionButton() {
         Image(
             painter = rememberAnimatedVectorPainter(image, atEnd),
             contentDescription = "VectorDrawable",
-            modifier = Modifier.clickable {
-                atEnd = !atEnd
-            }.size(32.dp),
+            modifier = Modifier
+                .clickable {
+                    atEnd = !atEnd
+                }
+                .size(32.dp),
             contentScale = ContentScale.Crop,
         )
     }
